@@ -1,0 +1,103 @@
+from home.models import UserProfile
+from article.models import Article
+from django.db import models
+from django.contrib.auth.models import User
+import re
+from random import randint
+from django.db import IntegrityError
+from gallery.models import Category, Artwork
+import sys
+
+usersRead = open("generator/users.txt", "r+")
+sentencesRead = open("generator/sentences.txt", "r+")
+profilePicRead = open("generator/profile_pictures.txt", "r+")
+titlesRead = open("generator/titles.txt", "r+")
+articleUrlRead = open("generator/article_urls.txt", "r+")
+coverUrlRead = open("generator/covers.txt", "r+")
+categoryRead = open("generator/categories.txt", "r+")
+
+# list of the file container
+names = usersRead.read().split("\n");
+profilePic = profilePicRead.read().split("\n")
+sentences = re.findall(r"\s+[^.!?]*[.!?]", sentencesRead.read())
+titles = titlesRead.read().split("\n")
+articleUrl = articleUrlRead.read().split("\n")
+coverUrl = coverUrlRead.read().split("\n")
+categoriesTitle = categoryRead.read().split("\n")
+
+# their respective length
+namesLen = len(names)-1
+profilePicLen = len(profilePic)-1
+sentenceLen = len(sentences)-1
+titlesLen = len(titles)-1
+articleUrlLen = len(articleUrl)-1
+coverUrlLen = len(coverUrl)-1
+categoriesTitleLen = len(categoriesTitle)-1
+
+# delete previous crap
+UserProfile.objects.all().delete()
+# User.objects.all().delete().exclude(username=root)
+
+
+for i in range(6):
+    seed = randint(0,200)
+
+    user = User(username= (names[seed%namesLen]))
+    user.set_password(names[seed%namesLen])
+    user.save()
+
+    userProfile = UserProfile()
+    userProfile.user = user
+    userProfile.firstname = (names[seed%namesLen])
+    userProfile.lastname = (names[seed*seed%namesLen])
+    userProfile.email = (names[seed%namesLen]) +"@punk.com"
+    userProfile.image = (profilePic[seed%profilePicLen])
+    userProfile.coverPhoto = (coverUrl[seed%coverUrlLen])
+    userProfile.description = (titles[seed%titlesLen])
+    userProfile.key_skills = (titles[seed%titlesLen])
+    userProfile.description = sentences[seed%sentenceLen]
+    userProfile.save()
+
+    for i in range(5):
+      theCategory = Category()
+      theCategory.title = categoriesTitle[(seed+i)%categoriesTitleLen]
+      theCategory.owner = userProfile
+      theCategory.thumbnail = profilePic[(seed+i)%profilePicLen]
+      theCategory.save()
+
+      for z in range(10):
+        theArtwork = Artwork()
+        theArtwork.title = titles[(seed+z)%titlesLen]
+        theArtwork.url_path = articleUrl[(seed+z)%articleUrlLen]
+        theArtwork.category = theCategory
+        theArtwork.owner = userProfile
+        theArtwork.save()
+
+    for i in range(20):
+
+      articleseed = randint(0,1000)
+      article = Article()
+      article.title = (titles[articleseed%titlesLen])
+      article.body=sentences[articleseed%sentenceLen]
+      if (i % 2) == 0:
+        article.is_project=True
+      else:
+        article.is_project=False
+      article.image = articleUrl[articleseed%articleUrlLen]
+      article.owner = userProfile
+      article.save()
+
+      theCategory = Category()
+
+
+
+    
+
+sentencesRead.close()
+usersRead.close()
+profilePicRead.close()
+titlesRead.close()
+articleUrlRead.close()
+
+
+

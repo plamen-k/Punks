@@ -1,0 +1,68 @@
+{% extends 'home/base.html' %}
+{% load staticfiles %}
+
+
+{% block 'breadcrumbs' %}
+<div class="col-md-10">
+  <a href="/home">Home</a>
+</div>
+{% endblock %}
+
+
+{% block 'users' %}
+<div class="home-background">
+<div class="container_unbound">
+  {% for profile in profiles %}
+
+  <div class="col-md-2 profile-wrap">
+    <a href="{% url 'profile' profile.user.username %}">{{profile.firstname}} {{profile.lastname}}</a>
+      {% if the_user == profile.user %} 
+      <a  href="{% url 'profile_edit' profile.user.username %}"><button class="glyphicon glyphicon-edit"></button></a>
+      </h1>
+  {% endif %}
+    <hr>
+    <p>{{profile.email}}</p>
+    <div class="profile_picture">
+      <img src="{{ profile.image}}" />
+    </div>
+    <p class="home-description">{{profile.display_safe_description|slice:":100"}}...</p>
+        <div class="view-page-container">
+    <a class="pull-left" href="{% url 'articles' profile.user.username "articles" %}">Articles</a>
+    <a class="pull-right" href="{% url 'articles' profile.user.username "projects" %}">Projects</a>
+    <a class="home-button" href="{% url 'profile' profile.user.username %}">VIEW PAGE</a>
+
+      {# <span class="glyphicon glyphicon-remove profile-close"></span> #}
+    </div>
+  </div>
+
+<!--  <div class="profile-wrap col-md-2" style="min-width:35px">
+    <div class="profile-container">
+      <a style="font-size:1em;color:gray"href="{% url 'profile' profile.user.username %}"><h1 class="sizefix-h1">{{profile.firstname}} {{profile.lastname}}</h1></a>
+  {% if the_user == profile.user %} 
+      <a  href="{% url 'profile_edit' profile.user.username %}"><button class="glyphicon glyphicon-edit"></button></a>
+      </h1>
+  {% endif %}
+      <hr/>
+      <p>{{profile.email}}</p>
+  
+      <div class="profile_picture">
+        <img src="{{ profile.image}}" />
+      </div>
+      <p>...</p>
+      <p class="home-description">{{profile.display_safe_description|slice:":100"}}...</p>
+
+    <div class="view-page-container">
+    <a class="pull-left" href="{% url 'articles' profile.user.username "articles" %}">Articles</a>
+    <a class="pull-right" href="{% url 'articles' profile.user.username "projects" %}">Projects</a>
+    <a class="home-button" href="{% url 'profile' profile.user.username %}">VIEW PAGE</a>
+
+      {# <span class="glyphicon glyphicon-remove profile-close"></span> #}
+    </div>
+    </div> 
+  </div> -->
+	{% endfor %}
+</div>
+</div>
+
+{% endblock %}
+

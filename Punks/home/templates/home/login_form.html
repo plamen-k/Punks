@@ -1,0 +1,28 @@
+{% extends "home/base.html" %}
+
+{% block 'login_form' %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form style="text-align:center" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+
+  <div class="profile-wrap">
+    <div class="profile-container">
+    <div style="margin-top:10px;background: url('http://icons.iconarchive.com/icons/artua/dragon-soft/512/User-icon.png') no-repeat; background-size: cover; " class="profile-picture circular-image">
+      </div>
+      <input placeholder="Username" name="username" type="textfield"/>
+      <input placeholder="Password" name="password" type="password"/>
+      <hr/>
+
+      <input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+    </div>
+  </div>
+
+  
+</form>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "home/base.html" %}
+
+
+{% block 'edit_article' %}
+
+<form enctype="multipart/form-data" method="post" action="{% url 'article_edit' article_id %}"> {% csrf_token %}
+    <p>{{ form }}</p>
+    <input type="submit" value = "GO" />
+</form>
+<h1>sdasd</h1>
+
+{% endblock %}
+

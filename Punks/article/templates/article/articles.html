@@ -1,0 +1,90 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load staticfiles %}
+
+{% block 'breadcrumbs' %}
+<a href="/home">Home</a>/<a href="{% url 'profile' owner.user.username %}">{{owner.user.username}}'s profile</a>/<a href="{% url 'articles' owner.user.username 'articles' %}">Articles</a>
+{% endblock %}
+
+{% block 'articles' %}
+	
+<div id="gallery-content">
+
+<div class="article-profile">
+	<div class="article-profile-image" style="background:url('{{owner.coverPhoto}}');background-size: cover;">
+    <div class="profile-content-holder">
+      <a href="{% url 'profile' owner.user.username %}"><h1 class="article-profile-header">{{owner.user.first_name}} {{owner.user.last_name}}</h1></a>
+  		<p class="article-profile-paragraph">{{owner.display_safe_description}}</p>
+      <div style="background: url('{{ owner.image}}') no-repeat; background-size: cover; " class="profile-picture circular-image" id="circle-article"> </div>
+
+      {% if owner.user.username == the_user.username %}
+        <a href="{% url 'add_article' type %}"><button class="pull-right edit-button glyphicon glyphicon-plus"></button></a>
+      {% endif %}
+
+    </div>
+	</div>
+</div>
+
+{% for article in content %}
+
+<div class="row row_shadow">
+
+  <div class="col-md-12 gallery_text">
+  <h1 class="article-header"><a href="{% url 'fullArticle' article.owner.user article.pk %}">{{article.display_safe_title}}</a> 		
+    {% if the_user.username == article.owner.user.username  %}
+        <a href="{% url 'article_delete' article.pk %}"><button class="pull-right edit-button glyphicon glyphicon-remove" id="delete-button"></button></a>
+        <a href="{% url 'article_edit' article.pk %}"><button class="pull-right edit-button glyphicon glyphicon-pencil"></button></a>
+	{% endif %}
+	</h1>
+		<hr/>
+		  {% if article.image != "" %}
+  <div class="col-md-2 pull-right">  
+
+
+
+  <p class="posted"><strong>Posted By: </strong>{{article.owner.user.first_name}} {{article.owner.user.last_name}}</p>
+  <p class="date">{{article.created_at}}</p>
+  
+  <a href="{% url 'fullArticle' article.owner.user article.pk %}" class="btn btn-success">View Article</a>
+</div>
+  <div class="image-gal-container img-thumbnail gallery-thumbnail pull-left">
+  	<img src="{{article.image}}"/>
+  </div>
+  {% endif %}
+
+  <p>{{article.display_safe_body|slice:":500"}}</p>
+
+
+  </div>
+
+
+
+
+
+
+</div>
+{% endfor %}
+
+<div class="pagination">
+  <span class="step-links">
+      {% if content.has_previous %}
+          <a href="?page={{ content.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ content.number }} of {{ content.paginator.num_pages }}.
+      </span>
+
+      {% if content.has_next %}
+          <a href="?page={{ content.next_page_number }}">next</a>
+      {% endif %}
+  </span>
+</div>
+
+</div>
+
+
+
+
+
+{% endblock %}

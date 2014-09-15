@@ -1,0 +1,99 @@
+{% extends 'home/base.html' %}
+
+{% block 'breadcrumbs' %}
+<a href="/home">Home</a>/<a href="{% url 'profile' owner.user.username %}">{{owner.user.username}}'s profile</a>
+{% endblock %}
+
+{% block 'profile' %}
+  <div class="col-md-10 profile-section">
+  <script type="text/javascript" src="/static/js/lightbox.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/css/lightbox.css"/>
+      <!-- <img data-lightbox="image-1" class="profile-thumbnail col-xs-2" src="{{owner.image}}"/> -->
+      <a class="col-md-3 profile-thumbnail" href="{{owner.image}}" data-lightbox="image-1"><img  src="{{owner.image}}"/></a>
+      <h1>{{owner.key_skills}}</h1>
+      <p class="profile-text-borders">{{owner.description}}</p>
+      <p> - {{owner.firstname}} {{owner.lastname}}</p>
+
+  </div>
+
+  <div class="col-md-10 profile-section">
+    <hr/>
+    <h1 class="gallery-header">Gallery</h1>
+  </div>
+
+  <div class="col-md-10 profile-section" style="background:#4fafe8">
+    <div id="triangle-styler">
+      <img src="/static/images/profile-triangle.png"/>
+    </div>
+
+    <div class="shadow-wrap">
+      <div class=" col-centered gallery-top-part">
+        {% if owner.user.username == the_user.username %}
+         <a style="color:white;font-size:1.3em;padding:2px" href="{% url 'add_category' %}">+</a>
+        {% endif %}
+      </div>
+      
+      <div class=" col-centered gallery-middle-part">
+        <div style="margin:auto;display:inline">
+        {% for category in categories %}
+         
+            <div class="gallery_thumb_container">
+              <div>
+              {% if owner.user.username == the_user.username %}
+                <a href="{% url 'add_artwork' category.pk %}">+</a>
+              {% endif %}
+            <a href="{% url 'category_view' owner.user.username category.pk %}">
+               <img class="gallery_thumb" src='{% if category.thumbnail|truncatechars:4 == 's...' %}/{% endif %}{{category.thumbnail}}'/>
+              </div>
+            <p class="gallery_paragraph">{{category.title}}
+            </p></a>
+              
+            </div>
+        {% endfor %}
+        </div>
+      </div>
+      <div class=" col-centered gallery-bottom-part"></div>
+    </div>
+  </div>
+
+  <div class="col-md-10 profile-section">
+    <div class="col-md-5 content-holder-articles">
+      <div class="profile-article-header">
+        <h1><a href="{% url 'articles' owner.user.username 'articles' %}">Articles</a>
+        {% if owner.user.username == the_user.username %}
+          <a href="{% url 'add_article' 'article' %}" class="pull-right profile-add-new">+</a>
+        {% endif %}
+        </h1>
+        
+      </div>
+      <div class="profile-article-body">
+      {% for article in articles %}
+      <p class="{% if forloop.counter|divisibleby:2 %}article-discolorment{% endif %} profile-text-based-stuff">
+      
+         <a href="{% url 'fullArticle' article.owner.user article.pk %}">{{ article|truncatechars:50 }}</a>
+      </p>
+      {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-md-5 content-holder-articles">
+      <div class="profile-article-header">
+        <h1><a href="{% url 'articles' owner.user.username 'projects' %}">Projects</a>
+        {% if owner.user.username == the_user.username %}
+          <a href="{% url 'add_article' 'project' %}" class="pull-right profile-add-new">+</a>
+        {% endif %}
+        </h1>
+      </div>
+      <div class="profile-article-body">
+      {% for project in projects %}
+      <p class="{% if forloop.counter|divisibleby:2 %}article-discolorment{% endif %} profile-text-based-stuff">
+        <a href="{% url 'fullArticle' project.owner.user project.pk %}"> {{project|truncatechars:20}}</a>
+        {{project.created_at}}
+      </p>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

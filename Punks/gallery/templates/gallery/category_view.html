@@ -1,0 +1,23 @@
+{% extends 'home/base.html' %}
+
+{% block 'lightbox' %}
+  <script type="text/javascript" src="/static/js/lightbox.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/css/lightbox.css"/>
+{% endblock %}
+
+{% block 'category_gallery' %}
+<div id="gallery-content" style="background:white;">
+{% for artwork in artworks %}
+  <div class="gallery-content-view col-md-4">
+    <div class="thumbnail" id="category-view-targeted-squared">
+    <!-- I know it's very ugly and stupid way to do it, but so far i haven't come up with a better solution. How it works?
+    It takes the first chars and trunicates them, if starts with static... , adds a slash to the beginning for the relative root path, otherwise uses no slash for the online resource.
+    Email me if you have a better idea, seriously ! -->
+      <a href="{% if artwork.url_path|truncatechars:4 == 's...' %}/{% endif %}{{artwork.url_path}}" data-lightbox="image-1"><img src="{% if artwork.url_path|truncatechars:4 == 's...' %}/{% endif %}{{artwork.url_path}}"/></a>
+      <p>{{artwork.title}}</p>
+    </div>
+    
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'home/base.html' %}
+
+{% block 'add_category' %}
+<form enctype="multipart/form-data" method="POST" action="{% url 'add_artwork' category.pk %}"> {% csrf_token %}
+    <p>{{ form|safe }}</p>
+    <input type="submit" value = "GO" />
+</form>
+{% endblock %}
