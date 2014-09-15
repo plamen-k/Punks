@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from home.models import UserProfile
 from article.models import Article
 from django.db import models
@@ -38,18 +39,18 @@ categoriesTitleLen = len(categoriesTitle)-1
 UserProfile.objects.all().delete()
 # User.objects.all().delete().exclude(username=root)
 
-
+names = ["Bryant","Burgess","Burns","Butler","Cannon","Carla","Carlson","Carlton","Carr","Carson","Carter","Casey","Cassandra","Castillo","Catherine","Cecil","Cecilia","cgee","Chambers","Chris","Christine","Christopher","Clarence","Clark","Clay","Collins","Conrad","Constance","Cook","Cooper","Craig","Cross","Cummings","Curry","Cynthia","Daisy","Dana","Danny","Darnell","Davis","Delgado","Delia","Derek","Dianna","Dianne","Domingo","Dominick","Doris","Dorothy","Douglas","Doyle","Duncan","Earl","Edwards","eed","eid","Ella","Eloise","Elsa","Elvira","Emmett","ena","Eric","Erica","Erick","Estelle","Estrada","Eula","Eunice","Eva","Evan","Evelyn","ewman","ewton","eyes","Fannie","Faye","Ferguson","Fernando","Figueroa","Flores","Fowler","Fox","Francis","Franklin","Freda","Fredrick","Freeman","French","Fuller","Garrett","Geoffrey","Gerardo","Gibson","Gilbert","Gill","Glen","Glenn","Gonzalez","Gordon","Graham","Grant","Green","Greene","Gregg","Guadalupe","Guy","Hale","Hall","Hampton","Hannah","Hardy",]
 for i in range(6):
-    seed = randint(0,200)
+    seed = randint(0,50)
 
-    user = User(username= (names[seed%namesLen]))
+    user = User(username= (names[i]))
     user.set_password(names[seed%namesLen])
     user.save()
 
     userProfile = UserProfile()
     userProfile.user = user
-    userProfile.firstname = (names[seed%namesLen])
-    userProfile.lastname = (names[seed*seed%namesLen])
+    userProfile.firstname = (names[i])
+    userProfile.lastname = (names[i+1])
     userProfile.email = (names[seed%namesLen]) +"@punk.com"
     userProfile.image = (profilePic[seed%profilePicLen])
     userProfile.coverPhoto = (coverUrl[seed%coverUrlLen])
